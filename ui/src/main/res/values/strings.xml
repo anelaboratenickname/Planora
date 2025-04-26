@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasks">Задачи</string>
+    <string name="notes">Заметки</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="priority">Приоритет</string>
+    <string name="create">Создать</string>
+    <string name="save_new_tag">Сохранить новую метку</string>
+    <string name="cancel_tag_creation">Отменить создание метки</string>
+    <string name="search_tags">Поиск меток по названию</string>
+    <string name="selected_tags">Выбранные</string>
+    <string name="all_tags">Все метки</string>
+    <string name="cancel">Отменить</string>
+    <string name="save">Сохранить</string>
+    <string name="subtask">Подзадача</string>
+</resources>

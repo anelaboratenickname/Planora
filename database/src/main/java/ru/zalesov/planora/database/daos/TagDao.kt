@@ -2,6 +2,7 @@ package ru.zalesov.planora.database.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +14,9 @@ import ru.zalesov.planora.database.entities.TaskTagCrossRef
 interface TagDao {
 
     @Upsert
+    suspend fun insertTag(tagEntity: TagEntity)
+
+    @Upsert
     suspend fun insertTags(tagEntities: List<TagEntity>)
 
     @Upsert
@@ -22,7 +26,7 @@ interface TagDao {
     suspend fun insertNoteTagCrossRefs(noteTagCrossRefs: List<NoteTagCrossRef>)
 
     @Query("SELECT * FROM tag")
-    suspend fun getAllTags(): Flow<List<TagEntity>>
+    fun getAllTags(): Flow<List<TagEntity>>
 
     @Query("SELECT * FROM task_tag")
     suspend fun getAllTaskTagCrossRefs(): List<TaskTagCrossRef>

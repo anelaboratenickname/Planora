@@ -1,18 +1,18 @@
 package ru.zalesov.planora.database.converters
 
 import androidx.room.TypeConverter
-import ru.zalesov.planora.database.entities.TaskEntityPriority
+import ru.zalesov.planora.core.common.TaskPriority
 
 class PriorityConverters {
 
     @TypeConverter
-    fun toString(priority: TaskEntityPriority): String {
+    fun toString(priority: TaskPriority): String {
         return priority.name
     }
 
     @TypeConverter
-    fun fromString(priorityName: String): TaskEntityPriority {
-        return TaskEntityPriority.valueOf(priorityName)
+    fun fromString(priorityName: String): TaskPriority {
+        return TaskPriority.valueOf(priorityName)
     }
 
 }

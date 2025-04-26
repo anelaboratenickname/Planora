@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import ru.zalesov.planora.data.mappers.toNote
 import ru.zalesov.planora.data.mappers.toNoteDetailed
 import ru.zalesov.planora.database.PlanoraDatabase
+import ru.zalesov.planora.database.daos.NoteDao
+import ru.zalesov.planora.database.daos.TagDao
 import ru.zalesov.planora.database.entities.NoteDetailed
 import ru.zalesov.planora.database.entities.NoteTagCrossRef
 import ru.zalesov.planora.models.Note
@@ -16,11 +18,9 @@ import ru.zalesov.planora.repositories.NotesRepository
 import kotlin.collections.map
 
 class NotesRepositoryImpl(
-    database: PlanoraDatabase
+    val noteDao: NoteDao,
+    val tagDao: TagDao
 ) : NotesRepository {
-
-    private val noteDao = database.noteDao()
-    private val tagDao = database.tagDao()
 
     override fun getAllNotes(): Flow<List<Note>> {
         return noteDao.getAllNotes().map { notes -> notes.map { it.toNote() } }

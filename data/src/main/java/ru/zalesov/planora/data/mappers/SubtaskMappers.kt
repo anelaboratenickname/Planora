@@ -7,7 +7,8 @@ import ru.zalesov.planora.models.Subtask
 fun SubtaskEntity.toSubtask(): Subtask {
     return Subtask(
         id = subtaskEntityId,
-        title = title
+        title = title,
+        isCompleted = isCompleted
     )
 }
 
@@ -15,6 +16,7 @@ fun Subtask.toSubtaskEntity(parentTaskId: String): SubtaskEntity {
     return SubtaskEntity(
         subtaskEntityId = if (id.isEmpty()) generateUuid() else id,
         parentTaskId = parentTaskId,
-        title = title
+        title = title,
+        isCompleted = isCompleted
     )
 }

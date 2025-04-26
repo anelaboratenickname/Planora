@@ -1,5 +1,7 @@
 package ru.zalesov.planora.usecases
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.zalesov.planora.models.Note
 import ru.zalesov.planora.repositories.NotesRepository
 
@@ -8,7 +10,9 @@ class RemoveNoteUseCase(
 ) {
 
     suspend operator fun invoke(note: Note) {
-        notesRepository.removeNote(note)
+        withContext(Dispatchers.IO) {
+            notesRepository.removeNote(note)
+        }
     }
 
 }

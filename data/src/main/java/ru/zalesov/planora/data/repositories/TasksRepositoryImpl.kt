@@ -6,24 +6,31 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.zalesov.planora.core.common.TaskPriority
+import ru.zalesov.planora.data.mappers.toSubtaskEntity
 import ru.zalesov.planora.data.mappers.toTask
 import ru.zalesov.planora.data.mappers.toTaskDetailed
-import ru.zalesov.planora.database.PlanoraDatabase
+import ru.zalesov.planora.database.daos.TagDao
+import ru.zalesov.planora.database.daos.TaskDao
 import ru.zalesov.planora.database.entities.TaskDetailed
 import ru.zalesov.planora.database.entities.TaskNoteCrossRef
 import ru.zalesov.planora.database.entities.TaskTagCrossRef
+import ru.zalesov.planora.models.Subtask
 import ru.zalesov.planora.models.Task
 import ru.zalesov.planora.repositories.TasksRepository
 
 class TasksRepositoryImpl(
-    database: PlanoraDatabase
+    val taskDao: TaskDao,
+    val tagDao: TagDao
 ) : TasksRepository {
-
-    private val taskDao = database.taskDao()
-    private val tagDao = database.tagDao()
 
     override fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAllTasks().map { detailedTasks -> detailedTasks.map { it.toTask() } }
+    }
+
+    override suspend fun getTaskById(taskId: String): Task? {
+        val task = taskDao.getTaskById(taskEntityId = taskId)?.toTask()
+        return task
     }
 
     override suspend fun addTask(task: Task) {
@@ -55,12 +62,12 @@ class TasksRepositoryImpl(
         taskDao.insertTaskNoteCrossRefs(taskNoteCrossRefs)
     }
 
-    override suspend fun updateTask(task: Task) {
-        val taskDetailed = task.toTaskDetailed()
-        taskDao.insertTask(taskDetailed.taskEntity)
-        updateSubtasks(taskDetailed)
-        updateTags(taskDetailed)
-        updateTaskNoteCrossRefs(taskDetailed)
+    override suspend fun editTaskCompletion(taskId: String, isCompleted: Boolean) {
+        taskDao.setTaskCompletion(taskEntityId = taskId, isCompleted = isCompleted)
+    }
+
+    override suspend fun editSubtaskCompletion(subtaskId: String, isCompleted: Boolean) {
+        taskDao.setSubtaskCompletion(subtaskEntityId = subtaskId, isCompleted = isCompleted)
     }
 
     override suspend fun removeTask(task: Task) {
@@ -70,6 +77,10 @@ class TasksRepositoryImpl(
         tagDao.deleteTaskTagCrossRefs(taskEntity.taskEntityId)
         taskDao.deleteTaskNoteCrossRefs(taskEntity.taskEntityId)
         deleteUnusedTags()
+    }
+
+    override suspend fun removeSubtask(subtaskId: String) {
+        taskDao.deleteSubtask(subtaskId)
     }
 
     private suspend fun updateSubtasks(taskDetailed: TaskDetailed) {

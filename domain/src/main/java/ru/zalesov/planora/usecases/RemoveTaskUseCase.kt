@@ -1,5 +1,7 @@
 package ru.zalesov.planora.usecases
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.zalesov.planora.models.Task
 import ru.zalesov.planora.repositories.TasksRepository
 
@@ -8,7 +10,9 @@ class RemoveTaskUseCase(
 ) {
 
     suspend operator fun invoke(task: Task) {
-        repository.removeTask(task)
+        withContext(Dispatchers.IO) {
+            repository.removeTask(task)
+        }
     }
 
 }

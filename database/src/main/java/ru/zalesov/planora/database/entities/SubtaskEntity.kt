@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class SubtaskEntity(
     @PrimaryKey val subtaskEntityId: String,
     val parentTaskId: String,
-    val title: String
+    val title: String,
+    val isCompleted: Boolean
 )
